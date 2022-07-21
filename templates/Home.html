@@ -1,0 +1,390 @@
+<html>
+    <head>
+        <title>
+            iDat
+        </title>
+        <!-- CSS Files -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/nucleo-icons.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/nucleo-svg.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/material-dashboard.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/icon.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/font.css') }}">
+        <!-- JS Files -->
+        <script src=" {{ url_for('static', filename='js/jquery-3.6.0.min.js') }} " integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src=" {{ url_for('static', filename='js/core/popper.min.js') }} "></script>
+        <script src=" {{ url_for('static', filename='js/core/bootstrap.bundle.min.js') }} "></script>
+        <script src=" {{ url_for('static', filename='js/plugins/perfect-scrollbar.min.js') }} "></script>
+        <script src=" {{ url_for('static', filename='js/plugins/smooth-scrollbar.min.js') }} "></script>
+        <script src=" {{ url_for('static', filename='js/material-dashboard.min.js') }} "></script>
+        <script src=" {{ url_for('static', filename='js/font.js') }} "></script>
+    </head>
+    <body>
+        <div class="navbar navbar-main navbar-expand-lg position-sticky mt-4 top-1 px-0 mx-4 shadow-none border-radius-xl z-index-sticky" id="navbarBlur" data-scroll="true">
+            <div class="container-fluid py-1 px-3">
+                <h6 class="font-weight-bolder mb-0">UserName</h6>
+            </div>
+            <div class="sidenav-toggler sidenav-toggler-inner d-xl-block d-none ">
+                <a href="javascript:;" class="nav-link text-body p-0">
+                    <div class="sidenav-toggler-inner">
+                        <i class="sidenav-toggler-line"></i>
+                        <i class="sidenav-toggler-line"></i>
+                        <i class="sidenav-toggler-line"></i>
+                    </div>
+                </a>
+            </div>
+            <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+                <ul class="navbar-nav  justify-content-end">
+                    <li class="nav-item">
+
+                    </li>
+                    <li class="nav-item">
+                        <a href="javascript:;" class="nav-link text-body p-0 position-relative">
+                            <i class="material-icons me-sm-1">
+                                account_circle
+                            </i>
+                        </a>
+                    </li>
+                    <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+                        <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+                            <div class="sidenav-toggler-inner">
+                                <i class="sidenav-toggler-line"></i>
+                                <i class="sidenav-toggler-line"></i>
+                                <i class="sidenav-toggler-line"></i>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3   bg-gradient-dark" id="sidenav-main">
+            <div class="sidenav-header">
+                <i class="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
+                <a class="navbar-brand m-0" href=" https://demos.creative-tim.com/material-dashboard/pages/dashboard " target="_blank">
+                    <img src=" {{ url_for('static', filename='img/logo-ct.png') }}" class="navbar-brand-img h-100" alt="main_logo">
+                    <span class="ms-1 font-weight-bold text-white">iDAT - Standards Made Easy</span>
+                </a>
+            </div>
+            <hr class="horizontal light mt-0 mb-2">
+            <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-white " href="{{url_for('Dashboard')}}">
+                            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                <i class="material-icons opacity-10">dashboard</i>
+                            </div>
+                            <span class="nav-link-text ms-1">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white active bg-gradient-primary" href="{{url_for('Training')}}">
+                            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                <i class="material-icons opacity-10">model_training</i>
+                            </div>
+                            <span class="nav-link-text ms-1">Training</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white " href="{{url_for('LiveData')}}">
+                            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                <i class="material-icons opacity-10">fact_check</i>
+                            </div>
+                            <span class="nav-link-text ms-1">Live Data</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white " href="{{url_for('SdtmigDecoder')}}">
+                            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                <i class="material-icons opacity-10">description</i>
+                            </div>
+                            <span class="nav-link-text ms-1">SDTMIG Decoder</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+        <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+            <div class="container-fluid py-4">
+                <div class="row mb-5">
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-header position-relative p-3 m-3">
+                                <div class="bg-gradient-info shadow-primary shadow-dark text-center border-radius-xl mt-n4 position-absolute p-3">
+                                    <h3 class="text-white">Data Source Connect</h3>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div>
+                                    <div class="input-group input-group-outline my-3">
+                                        <select class="form-control" id="connectType">
+                                            <option>Select Connection</option>
+                                            <option value="oracle">Oracle</option>
+                                            <option value="sas">SAS Datasets</option>
+                                        </select>
+                                    </div>
+                                    <div id="connectionTypeParam">
+
+                                    </div>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <code id="fileupload">{{message}}</code>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-header position-relative p-3 m-3">
+                                <div class="bg-gradient-info shadow-primary shadow-dark text-center border-radius-xl mt-n4 position-absolute p-3">
+                                    <h3 class="text-white">Dataset Select For Metadata</h3>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div>
+                                    <code id="ba_message">{{ba_message}}</code>
+                                </div>
+                                <div id="datassetSelect">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-header position-relative p-3 m-3">
+                                <div class="bg-gradient-info shadow-primary shadow-dark text-center border-radius-xl mt-n4 position-absolute p-3">
+                                    <h3 class="text-white">Variable Mapping</h3>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div>
+                                    <br>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <code id="automap">{{automap}}</code>
+                                        </div>
+                                    </div>
+                                    <div id="downloadMapFile">
+
+                                    </div>
+                                    <div id="uploadMapFile">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-header position-relative p-3 m-3">
+                                <div class="bg-gradient-info shadow-primary shadow-dark text-center border-radius-xl mt-n4 position-absolute p-3">
+                                    <h3 class="text-white">Principle Metadata</h3>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div>
+                                    <br>
+                                    <div class="row">
+                                        <div>
+                                            <code>{{trainingsuccess}}</code>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            Principle Metadata Collection :
+                                        </div>
+                                        <div class="col-6">
+                                            {{outputlocation}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!--<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>-->
+        <script>
+            $(document).ready(function(){
+                const ocConnect=`<form action="/oracleConnect" method="POST" enctype = "multipart/form-data"><div>
+                    <div class="input-group input-group-outline my-3">
+                        <input class="form-control" placeholder="User Name" name="ocuser" />
+                    </div>
+                    <div class="input-group input-group-outline my-3">
+                        <input class="form-control" type="password" placeholder="Password" name="ocpassword" />
+                    </div>
+                    <div class="input-group input-group-outline my-3">
+                        <input class="form-control" placeholder="DNS" name="ocdns" />
+                    </div>
+                    <div class="input-group input-group-outline my-3">
+                        <input class="form-control" placeholder="Snapshot" name="snapshot" />
+                    </div>
+                    <div class="input-group input-group-outline my-3">
+                        <input class="btn btn-primary" type="submit" value="Connect" />
+                    </div>
+                </div></form>`;
+
+                const sasConnect = `<div>
+                                    <div class="input-group input-group-outline my-3">
+                                        <select class="form-control" id="sasconnectType" onchange="SASConnectType()">
+                                            <option>Select SAS Connection Type</option>
+                                            <option value="server">Server</option>
+                                            <option value="local">Local Files</option>
+                                        </select>
+                                    </div>
+                                    <div id="connectionTypeSAS">
+
+                                    </div>
+                                </div>`
+
+                const oc_ba_search =` <form action="/oc_ba_search" method="POST" enctype = "multipart/form-data">
+                    <div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="input-group input-group-outline my-3">
+                                    <input class="form-control" placeholder="Enter Study Name:" name="study" />
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="input-group input-group-outline my-3">
+                                    <input class="btn btn-primary" value="Search" type="submit" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>`;
+
+                const training_oc =` <form action="/train_oracle" method="POST" enctype = "multipart/form-data"><div>
+                    <div class="input-group input-group-outline my-3">
+                        <select class="form-control" name="schemaLike">
+                            <option>Select BA</option>
+                            {% for ba in ba_list %}
+                            <option value="{{ba}}">{{ba}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="input-group input-group-outline my-3">
+                        <input class="form-control" placeholder="Table (Like ie SM_DM%):" name="tableLike" />
+                    </div>
+                    <div class="input-group input-group-outline my-3">
+                        <input class="form-control" placeholder="No of Tables:" name="numDataset" />
+                    </div>
+                    <div class="input-group input-group-outline my-3">
+                        <select class="form-control" name="domain">
+                            <option>Select Domain Name</option>
+                            {% for domain in curr_dom_list %}
+                            <option value="{{domain}}">{{domain}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="input-group input-group-outline my-3">
+                        <input class="form-control" placeholder="Snapshot" name="snapshot" />
+                    </div>
+                    <input class="btn btn-primary" type="submit" />
+                </div></form>`;
+
+                const training_saslocal =` <form action="/train_saslocal" method="POST" enctype = "multipart/form-data"><div>
+                    <div class="input-group input-group-outline my-3">
+                        <select class="form-control" name="domain">
+                            <option>Select Domain Name</option>
+                            {% for domain in curr_dom_list %}
+                            <option value="{{domain}}">{{domain}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <input class="btn btn-primary" type="submit" />
+                </div></form>`;
+
+                const mapfiledownload =` <form action="/download_mapfile" method=""><div>
+                    <input class="btn btn-primary" type="submit" value="Download" onclick="UploadUpdatedMapFile()" />
+                </div></form>`;
+
+                $('#connectType').on('change', function(){
+                    if( $(this).val() === 'oracle'){
+                        $('#connectionTypeParam').html(ocConnect);
+
+                    }else if($(this).val() === 'sas'){
+                        $('#connectionTypeParam').html(sasConnect);
+
+                    }
+                });
+
+                var x = document.getElementById('fileupload').innerText;
+                if( x === 'Local SAS File(s) Successfully Uploaded for Training'){
+                    $('#datassetSelect').html(training_saslocal);
+                }
+                if( x === 'UI has been connected to Oracle'){
+                    $('#datassetSelect').html(oc_ba_search);
+                }
+
+                var x = document.getElementById('ba_message').innerText;
+                if( x != ''){
+                    $('#datassetSelect').html(training_oc);
+                }
+
+                var x = document.getElementById('automap').innerText;
+                if( x != ''){
+                    $('#downloadMapFile').html(mapfiledownload);
+                }
+            });
+        </script>
+
+        <script type="text/javascript">
+            function SASConnectType() {
+                const sasServer = `<form action="/oracleConnect" method="POST" enctype = "multipart/form-data"><div>
+                    <div class="input-group input-group-outline my-3">
+                        <input class="form-control" placeholder="User Name" />
+                    </div>
+                    <div class="input-group input-group-outline my-3">
+                        <input class="form-control" type="password" placeholder="Password" />
+                    </div>
+                    <div class="input-group input-group-outline my-3">
+                        <input class="form-control" placeholder="Server Name" />
+                    </div>
+                    <div class="input-group input-group-outline my-3">
+                        <input class="btn btn-primary" type="submit" value="Connect" />
+                    </div>
+                </div></form>`;
+
+                const sasLocal = `<form action="/" method="POST" enctype = "multipart/form-data">
+                    <div>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <label class="custom-file-label">Choose SAS files</label>
+                                <input type="file" name="files" class="custom-file-input" id="sas" multiple />
+                            </div>
+                        </div>
+                        <input class="btn btn-primary" type="submit" name="upload" value="upload" />
+                    </div></form>`;
+                var x = document.getElementById("sasconnectType").value;
+                if( x === 'server'){
+                    $('#connectionTypeSAS').html(sasServer);
+                }else if(x === 'local'){
+                    $('#connectionTypeSAS').html(sasLocal);
+                }
+            }
+
+            function UploadUpdatedMapFile() {
+                const uploadMapFile = `<form action="/uploadmapfile" method="POST" enctype = "multipart/form-data">
+                    <div>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <label class="custom-file-label">Upload Updated Map File: </label>
+                                <input type="file" class="custom-file-input" name="mapfile" id="sas" />
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <input class="btn btn-primary" type="submit" name="upload" value="upload" />
+                    </div></form>`;
+                $('#uploadMapFile').html(uploadMapFile);
+            }
+        </script>
+    </body>
+</html>
