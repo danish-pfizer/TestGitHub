@@ -241,7 +241,7 @@
                 const training_oc =` <form action="/predict_oracle" method="POST" enctype = "multipart/form-data"><div>
                     <div class="input-group input-group-outline my-3">
                         <select class="form-control" name="schemaLike" required>
-                            <option>Select BA</option>
+                            <option value="">Select BA</option>
                             {% for ba in ba_list %}
                             <option value="{{ba}}">{{ba}}</option>
                             {% endfor %}

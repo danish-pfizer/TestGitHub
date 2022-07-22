@@ -432,7 +432,7 @@ def derive_target_files(pred_domains):
                 ctr1 = 0
                 val = ''
                 for j in df2.columns:
-                    if df2[j][k] != '' and df2[j][k] == df2[j][k]:
+                    if df2[j][k] != '' and df2[j][k] != '-' and df2[j][k] == df2[j][k]:
                         ctr1 = ctr1 + 1
                         val = df2[j][k]
                 if ctr1 > 1:
@@ -474,9 +474,12 @@ def derive_target_files(pred_domains):
     study_alias_v = pd.read_csv(c2.study_alias, low_memory=False)
     input_list = [EX_input, DS_input, DD_input, DM_input]
 
+    if DD_input.shape[0] == 0:
+        DD_input = DD_input
+    else:
+        DD_input = general_function(DD_input)
     EX_input = general_function(EX_input)
     DS_input = general_function(DS_input)
-    DD_input = general_function(DD_input)
     DM_input = general_function(DM_input)
 
     DM_input = generate_DM(EX_input, DS_input, DD_input, DM_input)
@@ -494,30 +497,44 @@ def derive_target_files(pred_domains):
     DM_ref_var = DM_input[['USUBJID', 'DMDTC', 'RFSTDTC', 'RFXENDTC']]
     EX_input_joined = pd.merge(EX_input, DM_ref_var, on='USUBJID', how='left').drop_duplicates()
     DS_input_joined = pd.merge(DS_input, DM_ref_var, on='USUBJID', how='left').drop_duplicates()
-    DD_input_joined = pd.merge(DD_input, DM_ref_var, on='USUBJID', how='left').drop_duplicates()
+    if DD_input.shape[0] > 0:
+        DD_input_joined = pd.merge(DD_input, DM_ref_var, on='USUBJID', how='left').drop_duplicates()
+    else:
+        DD_input_joined = DD_input
     #
     EX_input_joined = EX_input_joined.fillna(0)
     DS_input_joined = DS_input_joined.fillna(0)
-    DD_input_joined = DD_input_joined.fillna(0)
+    if DD_input.shape[0] > 0:
+        DD_input_joined = DD_input_joined.fillna(0)
+    else:
+        DD_input_joined = DD_input
     DM_ref_var = DM_ref_var.fillna(0)
 
     EX_input['EPOCH'] = epoch_cal(EX_input_joined['ECSTDTC'], EX_input_joined['RFSTDTC'],
                                   EX_input_joined['RFXENDTC'])
     DS_input['EPOCH'] = epoch_cal(DS_input_joined['DSSTDTC'], DS_input_joined['RFSTDTC'],
                                   DS_input_joined['RFXENDTC'])
-    DD_input['EPOCH'] = epoch_cal(DD_input_joined['DDDTC'], DD_input_joined['RFSTDTC'], DD_input_joined['RFXENDTC'])
+    if DD_input.shape[0] > 0:
+        DD_input['EPOCH'] = epoch_cal(DD_input_joined['DDDTC'], DD_input_joined['RFSTDTC'], DD_input_joined['RFXENDTC'])
+    else:
+        DD_input['EPOCH'] = ''
 
     EX_input['ECSTDY'] = dy_cal(EX_input_joined['ECSTDTC'], EX_input_joined['RFSTDTC'])
     EX_input['ECENDY'] = dy_cal(EX_input_joined['ECENDTC'], EX_input_joined['RFSTDTC'])
     DM_input['DMDY'] = dy_cal(DM_ref_var['DMDTC'], DM_ref_var['RFSTDTC'])
     DS_input['DSSTDY'] = dy_cal(DS_input_joined['DSSTDTC'], DS_input_joined['RFSTDTC'])
-    DD_input['DDDY'] = dy_cal(DD_input_joined['DDDTC'], DD_input_joined['RFSTDTC'])
-    DD_input['DDSTRESC'] = STRESC(DD_input['DDORRES'])
+    if DD_input.shape[0] > 0:
+        DD_input['DDDY'] = dy_cal(DD_input_joined['DDDTC'], DD_input_joined['RFSTDTC'])
+        DD_input['DDSTRESC'] = STRESC(DD_input['DDORRES'])
+    else:
+        DD_input['DDDY'] = ''
+        DD_input['DDSTRESC'] = ''
 
     EX_input = sdtmig_col_validation(sdtmig_df, EX_input, EX_input['DOMAIN'][1])
     DM_input = sdtmig_col_validation(sdtmig_df, DM_input, DM_input['DOMAIN'][1])
     DS_input = sdtmig_col_validation(sdtmig_df, DS_input, DS_input['DOMAIN'][1])
-    DD_input = sdtmig_col_validation(sdtmig_df, DD_input, DD_input['DOMAIN'][1])
+    if DD_input.shape[0] > 0:
+        DD_input = sdtmig_col_validation(sdtmig_df, DD_input, DD_input['DOMAIN'][1])
 
     write(EX_input, "EC")
     write(DM_input, "DM")
@@ -1270,13 +1287,19 @@ def generate_DM(EX_input,DS_input,DD_input,DM_input):
             DM_input = pd.merge(DM_input,RFICDTC_df, on = 'USUBJID', how = 'left')
         else:
             DM_input['RFICDTC'] = np.nan
-        DD_var_df = DD_rules(DD_input)
+        if DD_input.shape[0] > 0:
+            DD_var_df = DD_rules(DD_input)
+        else:
+            DD_var_df = DD_input
         if not DD_var_df.empty:
             DM_input = pd.merge(DM_input,DD_var_df, on = 'USUBJID', how = 'left')
         else:
             DM_input['DTHFL'] = np.nan
             DM_input['DTHDTC'] = np.nan
-        RFPENDTC_df = RFPENDTC_rule(DD_input)
+        if DD_input.shape[0] > 0:
+            RFPENDTC_df = RFPENDTC_rule(DD_input)
+        else:
+            RFPENDTC_df = DD_input
         if not RFPENDTC_df.empty:
             DM_input = pd.merge(DM_input,RFPENDTC_df, on = 'USUBJID', how = 'left')
         else:
@@ -1288,6 +1311,8 @@ def generate_DM(EX_input,DS_input,DD_input,DM_input):
 
 def write(df,domain):
     path = "Results/Target_Files/"+domain+".xpt"
+    if df.shape[0] == 0:
+        df = pd.DataFrame()
     pyreadstat.write_xport(df, path)
 
 def sdtmig_col_validation(sdtmig_df, source_df, domain_name):
