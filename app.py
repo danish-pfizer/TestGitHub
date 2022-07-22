@@ -82,7 +82,7 @@ def upload_file():
             df1 = pd.concat(frames)
         df1 = df1.fillna('')
         df1.to_excel("Results/Training_Files/Training_Dataset.xlsx", index=False)
-        return render_template('Home.html', message='Local SAS File(s) Successfully Uploaded for Training', curr_dom_list=c2.curr_dom_list)
+        return render_template('Home.html', message='Local SAS File(s) Successfully Uploaded for Training', curr_dom_list=c2.curr_dom_list, dom_list=c2.dom_list)
 
 @app.route('/oracleConnect', methods = ['GET', 'POST'])
 def connect_oracle():
@@ -92,10 +92,13 @@ def connect_oracle():
         ocpassword = request.form['ocpassword']
         ocdns = request.form['ocdns']
         try:
-            con = cx_Oracle.connect(ocuser, ocpassword, 'prddw')
+            con = cx_Oracle.connect(ocuser, ocpassword, 'prddw', encoding="UTF-8")
+            return render_template('Home.html', message='UI has been connected to Oracle',
+                                   curr_dom_list=c2.curr_dom_list, dom_list=c2.dom_list)
         except Exception as e:
-            print('There is an error in connecting to OC',e)
-        return render_template('Home.html', message='UI has been connected to Oracle', curr_dom_list=c2.curr_dom_list)
+            # print('There is an error in connecting to OC',e)
+            return render_template('Home.html', message='Please Enter Valid User Credentials')
+
 
 @app.route('/oracleConnect_Live', methods = ['GET', 'POST'])
 def connect_oracle_Live():
@@ -105,10 +108,12 @@ def connect_oracle_Live():
         ocpassword = request.form['ocpassword']
         ocdns = request.form['ocdns']
         try:
-            con = cx_Oracle.connect(ocuser, ocpassword, 'prddw')
+            con = cx_Oracle.connect(ocuser, ocpassword, 'prddw', encoding="UTF-8")
+            return render_template('LiveData.html', message='UI has been connected to Oracle')
         except Exception as e:
-            print('There is an error in connecting to OC',e)
-        return render_template('LiveData.html', message='UI has been connected to Oracle', curr_dom_list=c2.curr_dom_list)
+            # print('There is an error in connecting to OC',e)
+            return render_template('LiveData.html', message='Please Enter Valid User Credentials')
+
 
 @app.route('/oc_ba_search', methods = ['GET', 'POST'])
 def oc_ba_search():
@@ -121,7 +126,7 @@ def oc_ba_search():
             ba_list = a.get_ba()
             ba_list = list(set(ba_list))
             return render_template('Home.html', ba_message='Select BA from below dropdown list',
-                                   curr_dom_list=c2.curr_dom_list, ba_list=ba_list)
+                                   curr_dom_list=c2.curr_dom_list, ba_list=ba_list, dom_list=c2.dom_list)
         except Exception as e:
             print('There is an error in connecting to OC***',e)
 
@@ -131,13 +136,14 @@ def oc_ba_search_live():
     if request.method == 'POST':
         global study
         study = request.form['study']
+        study = study + '_SRDM'
         domain_oc = ''
         try:
             a = some(DB_type,DB_DNS,ocuser,ocpassword,domain_oc)
             ba_list = a.get_ba()
             ba_list = list(set(ba_list))
             return render_template('LiveData.html', ba_message='Select BA from below dropdown list',
-                                   curr_dom_list=c2.curr_dom_list, ba_list=ba_list)
+                                   curr_dom_list=c2.curr_dom_list, ba_list=ba_list, dom_list=c2.dom_list)
         except Exception as e:
             print('There is an error in connecting to OC***',e)
 
@@ -301,7 +307,7 @@ def upload_file_liveData():
             raw_ds = raw_ds.fillna(0)
             path = 'Results/LiveData_Files/' + tablename + '.xlsx'
             raw_ds.to_excel(path, index=False)
-        return render_template('LiveData.html', message='Local SAS File(s) Successfully Uploaded for LiveData', curr_dom_list=c2.curr_dom_list)
+        return render_template('LiveData.html', message='Local SAS File(s) Successfully Uploaded for LiveData', curr_dom_list=c2.curr_dom_list, dom_list=c2.dom_list)
 
 @app.route('/downloadTargetDataset', methods = ['GET', 'POST'])
 def downloadTargetDataset():
@@ -343,7 +349,8 @@ def predict_values_oracle():
         global schemaLike, numData, pred_domains
         schemaLike = request.form['schemaLike']
         # domain_name = request.form['domains']
-        numData = request.form['numDataset']
+        # numData = request.form['numDataset']
+        numData = 1
         domain_name = request.form.getlist('domains')
         l1 = []
         for i in domain_name:
@@ -1326,7 +1333,7 @@ class ETL:
         oc_config.pw = self.Password
         oc_config.dsn = self.DNS
 
-    def get_syn_sql_frame(self, Schema_Like, SynName, DSCount=10):
+    def get_syn_sql_frame(self, Schema_Like, SynName, DSCount):
         self.Schema_Like = Schema_Like
         self.SynName = SynName
         self.DSCount = DSCount
@@ -1355,7 +1362,7 @@ class ETL:
 
     def OC_fetch_synonym(self):
         try:
-            con = cx_Oracle.connect(oc_config.user, oc_config.pw, oc_config.dsn)
+            con = cx_Oracle.connect(oc_config.user, oc_config.pw, oc_config.dsn, encoding="UTF-8")
             sql = self.get_syn_sql_frame(self.Schema_Like, self.SynName, self.DSCount)
             cur = con.cursor()
             cur.execute(sql)
@@ -1379,7 +1386,7 @@ class ETL:
 
     def OC_fetch_ba(self):
         try:
-            con = cx_Oracle.connect(oc_config.user, oc_config.pw, oc_config.dsn)
+            con = cx_Oracle.connect(oc_config.user, oc_config.pw, oc_config.dsn, encoding="UTF-8")
             sql = self.get_syn_sql_frame(self.Schema_Like, '', self.DSCount)
             cur = con.cursor()
             cur.execute(sql)
@@ -1404,7 +1411,7 @@ class ETL:
 
     def OC_fetch_synonym_data(self, SchemaName, SynonymName, foldername, file):
         try:
-            con = cx_Oracle.connect(oc_config.user, oc_config.pw, oc_config.dsn)
+            con = cx_Oracle.connect(oc_config.user, oc_config.pw, oc_config.dsn, encoding="UTF-8")
             cur = con.cursor()
             # initiate schema
             cur.callproc("PKG_BUSINESS_AREA.SP_Initialize_BA", (SchemaName, None, 'NA/Dummy'))
@@ -1450,7 +1457,7 @@ class ETL:
 
     def oracle_fetch_data(self, SchemaName, TableName):
         try:
-            con = cx_Oracle.connect(oc_config.user, oc_config.pw, oc_config.dsn)
+            con = cx_Oracle.connect(oc_config.user, oc_config.pw, oc_config.dsn, encoding="UTF-8")
             cur = con.cursor()
             # data Extract
             sql = "select * from " + SchemaName + "." + TableName + " where ROWNUM <= 2"
@@ -1511,8 +1518,10 @@ class some:
     def get_ba(self):
         if (self.UserName is not None) and (self.Password is not None) and (study is not None):
             etlObj = ETL(DB_type,DB_DNS,self.UserName,self.Password )
+            # study = study + '_SRDM'
+            DSCount_live = None
             if etlObj.DB_Type == 'OC':
-                etlObj.get_syn_sql_frame(study,'',self.DSCount)
+                etlObj.get_syn_sql_frame(study,'',DSCount_live)
                 ba_list = etlObj.OC_fetch_ba()
                 return ba_list
 
@@ -1544,3 +1553,5 @@ if __name__ == "__main__":
     DB_type = 'OC'
     DB_DNS = 'prddw'
     app.run(debug=True)
+
+

@@ -241,7 +241,8 @@
                                     </div>
                                 </div>`
 
-                const training =` <form action="/data" method="POST" enctype = "multipart/form-data"><div>
+<!--                const training =` <form action="/data" method="POST" enctype = "multipart/form-data"><div>-->
+                const training =` <form action="/Training" method="POST" enctype = "multipart/form-data"><div>
                     <div class="input-group input-group-outline my-3">
                         <input class="form-control" placeholder="Domain Name" name="domain" />
                     </div>
@@ -260,7 +261,8 @@
                     <input class="btn btn-primary" type="submit" />
                 </div></form>`;
 
-                const training_saslocal =` <form action="/train_saslocal" method="POST" enctype = "multipart/form-data"><div>
+<!--                const training_saslocal =` <form action="/train_saslocal" method="POST" enctype = "multipart/form-data"><div>-->
+                const training_saslocal =` <form action="/Training" method="POST" enctype = "multipart/form-data"><div>
                     <div class="input-group input-group-outline my-3">
                         <input class="form-control" placeholder="Domain Name" name="domain" />
                     </div>
@@ -273,7 +275,8 @@
                     <input class="btn btn-primary" type="submit" />
                 </div></form>`;
 
-                const mapfiledownload =` <form action="/download_mapfile" method=""><div>
+<!--                const mapfiledownload =` <form action="/download_mapfile" method=""><div>-->
+                const mapfiledownload =` <form action="/Training" method=""><div>
                     <input class="btn btn-primary" type="submit" value="Download" onclick="UploadUpdatedMapFile()" />
                 </div></form>`;
 
@@ -316,7 +319,8 @@
                     </div>
                 </div></form>`;
 
-                const sasLocal = `<form action="/" method="POST" enctype = "multipart/form-data">
+<!--                const sasLocal = `<form action="/" method="POST" enctype = "multipart/form-data">-->
+                const sasLocal = `<form action="/Training" method="POST" enctype = "multipart/form-data">
                     <div>
                         <div class="input-group input-group-outline my-3">
                             <input class="form-control" name="schema" placeholder="Schema Name" />
@@ -338,7 +342,8 @@
             }
 
             function UploadUpdatedMapFile() {
-                const uploadMapFile = `<form action="/uploadmapfile" method="POST" enctype = "multipart/form-data">
+<!--                const uploadMapFile = `<form action="/uploadmapfile" method="POST" enctype = "multipart/form-data">-->
+                const uploadMapFile = `<form action="/Training" method="POST" enctype = "multipart/form-data">
                     <div>
                         <div class="input-group">
                             <div class="custom-file">

@@ -116,7 +116,7 @@
                             <div class="card-body">
                                 <div>
                                     <div class="input-group input-group-outline my-3">
-                                        <select class="form-control" id="connectType">
+                                        <select class="form-control" id="connectType" required>
                                             <option>Select Connection</option>
                                             <option value="oracle">Oracle</option>
                                             <option value="sas">SAS Datasets</option>
@@ -214,13 +214,13 @@
             $(document).ready(function(){
                 const ocConnect=`<form action="/oracleConnect" method="POST" enctype = "multipart/form-data"><div>
                     <div class="input-group input-group-outline my-3">
-                        <input class="form-control" placeholder="User Name" name="ocuser" />
+                        <input class="form-control" placeholder="User Name" name="ocuser" required/>
                     </div>
                     <div class="input-group input-group-outline my-3">
-                        <input class="form-control" type="password" placeholder="Password" name="ocpassword" />
+                        <input class="form-control" type="password" placeholder="Password" name="ocpassword" required/>
                     </div>
                     <div class="input-group input-group-outline my-3">
-                        <input class="form-control" placeholder="DNS" name="ocdns" />
+                        <input class="form-control" placeholder="DNS" name="ocdns" required/>
                     </div>
                     <div class="input-group input-group-outline my-3">
                         <input class="form-control" placeholder="Snapshot" name="snapshot" />
@@ -232,9 +232,9 @@
 
                 const sasConnect = `<div>
                                     <div class="input-group input-group-outline my-3">
-                                        <select class="form-control" id="sasconnectType" onchange="SASConnectType()">
+                                        <select class="form-control" id="sasconnectType" onchange="SASConnectType()" required>
                                             <option>Select SAS Connection Type</option>
-                                            <option value="server">Server</option>
+                                            <option value="server" disabled>Server</option>
                                             <option value="local">Local Files</option>
                                         </select>
                                     </div>
@@ -248,7 +248,7 @@
                         <div class="row">
                             <div class="col-6">
                                 <div class="input-group input-group-outline my-3">
-                                    <input class="form-control" placeholder="Enter Study Name:" name="study" />
+                                    <input class="form-control" placeholder="Enter Study Name:" name="study" required/>
                                 </div>
                             </div>
                             <div class="col-6">
@@ -261,25 +261,35 @@
                 </form>`;
 
                 const training_oc =` <form action="/train_oracle" method="POST" enctype = "multipart/form-data"><div>
-                    <div class="input-group input-group-outline my-3">
+                    <!--<div class="input-group input-group-outline my-3">
                         <select class="form-control" name="schemaLike">
                             <option>Select BA</option>
                             {% for ba in ba_list %}
                             <option value="{{ba}}">{{ba}}</option>
                             {% endfor %}
                         </select>
+                    </div>-->
+                    <div class="input-group input-group-outline my-3">
+                        <input class="form-control" placeholder="Schema (Like ie BA_%):" name="schemaLike" required/>
                     </div>
                     <div class="input-group input-group-outline my-3">
-                        <input class="form-control" placeholder="Table (Like ie SM_DM%):" name="tableLike" />
+                        <input class="form-control" placeholder="Table (Like ie SM_DM%):" name="tableLike" required/>
                     </div>
                     <div class="input-group input-group-outline my-3">
-                        <input class="form-control" placeholder="No of Tables:" name="numDataset" />
+                        <input class="form-control" placeholder="No of Tables:" name="numDataset" required/>
                     </div>
                     <div class="input-group input-group-outline my-3">
-                        <select class="form-control" name="domain">
+                        <select class="form-control" name="domain" required>
                             <option>Select Domain Name</option>
-                            {% for domain in curr_dom_list %}
+                            <!--{% for domain in curr_dom_list %}
                             <option value="{{domain}}">{{domain}}</option>
+                            {% endfor %}-->
+                            {% for domain in dom_list %}
+                            {% if domain in curr_dom_list %}
+                            <option value="{{domain}}">{{domain}}</option>
+                            {% else %}
+                            <option value="{{domain}}" disabled>{{domain}}</option>
+                            {% endif %}
                             {% endfor %}
                         </select>
                     </div>
@@ -291,10 +301,17 @@
 
                 const training_saslocal =` <form action="/train_saslocal" method="POST" enctype = "multipart/form-data"><div>
                     <div class="input-group input-group-outline my-3">
-                        <select class="form-control" name="domain">
+                        <select class="form-control" name="domain" required>
                             <option>Select Domain Name</option>
-                            {% for domain in curr_dom_list %}
+                            <!--{% for domain in curr_dom_list %}
                             <option value="{{domain}}">{{domain}}</option>
+                            {% endfor %}-->
+                            {% for domain in dom_list %}
+                            {% if domain in curr_dom_list %}
+                            <option value="{{domain}}">{{domain}}</option>
+                            {% else %}
+                            <option value="{{domain}}" disabled>{{domain}}</option>
+                            {% endif %}
                             {% endfor %}
                         </select>
                     </div>
@@ -320,7 +337,7 @@
                     $('#datassetSelect').html(training_saslocal);
                 }
                 if( x === 'UI has been connected to Oracle'){
-                    $('#datassetSelect').html(oc_ba_search);
+                    $('#datassetSelect').html(training_oc);
                 }
 
                 var x = document.getElementById('ba_message').innerText;
@@ -339,13 +356,13 @@
             function SASConnectType() {
                 const sasServer = `<form action="/oracleConnect" method="POST" enctype = "multipart/form-data"><div>
                     <div class="input-group input-group-outline my-3">
-                        <input class="form-control" placeholder="User Name" />
+                        <input class="form-control" placeholder="User Name" required/>
                     </div>
                     <div class="input-group input-group-outline my-3">
-                        <input class="form-control" type="password" placeholder="Password" />
+                        <input class="form-control" type="password" placeholder="Password" required/>
                     </div>
                     <div class="input-group input-group-outline my-3">
-                        <input class="form-control" placeholder="Server Name" />
+                        <input class="form-control" placeholder="Server Name" required/>
                     </div>
                     <div class="input-group input-group-outline my-3">
                         <input class="btn btn-primary" type="submit" value="Connect" />
@@ -357,7 +374,7 @@
                         <div class="input-group">
                             <div class="custom-file">
                                 <label class="custom-file-label">Choose SAS files</label>
-                                <input type="file" name="files" class="custom-file-input" id="sas" multiple />
+                                <input type="file" name="files" class="custom-file-input" id="sas" multiple required/>
                             </div>
                         </div>
                         <input class="btn btn-primary" type="submit" name="upload" value="upload" />
@@ -376,7 +393,7 @@
                         <div class="input-group">
                             <div class="custom-file">
                                 <label class="custom-file-label">Upload Updated Map File: </label>
-                                <input type="file" class="custom-file-input" name="mapfile" id="sas" />
+                                <input type="file" class="custom-file-input" name="mapfile" id="sas" required/>
                             </div>
                         </div>
                     </div>

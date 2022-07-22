@@ -117,7 +117,8 @@
                                 <div>
                                     <div>
                                         <br>
-                                        <form action="/decode_sdtmig" method="POST" enctype = "multipart/form-data">
+<!--                                        <form action="/decode_sdtmig" method="POST" enctype = "multipart/form-data">-->
+                                            <form action="/Training" enctype = "multipart/form-data">
                                             <div>
                                                 <div class="input-group">
                                                     <div class="custom-file">
@@ -198,7 +199,8 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
         <script>
             $(document).ready(function(){
-                const downloadmetadata =` <form action="/download_sdtmigmeta" method=""><div>
+<!--                const downloadmetadata =` <form action="/download_sdtmigmeta" method=""><div>-->
+                const downloadmetadata =` <form action="/Training" method=""><div>
                     <input class="btn btn-primary" type="submit" value="Download" onclick="DownloadSuccess()" />
                 </div></form>`;
 
