@@ -22,8 +22,8 @@ instant_client_dir = None
 # Client directory.  Note the use of the raw string r"..."  so backslashes can
 # be used as directory separators.
 if sys.platform.startswith("win"):
-    # instant_client_dir = r"D:\NLP_Projects\Historical_Data\instantclient_21_3"
-    instant_client_dir = r"C:\Oracle\instantclient_21_3"
+    instant_client_dir = r"D:\NLP_Projects\Historical_Data\instantclient_21_3"
+    # instant_client_dir = r"C:\Oracle\instantclient_21_3"
 
 # On macOS (Intel x86) set the directory to your Instant Client directory
 if sys.platform.startswith("darwin"):

@@ -363,6 +363,12 @@ def predict_values_oracle():
         derive_target_files(pred_domains)
 
         directmovecomplete = 'Variables derivation completed for domain(s): ' + ','.join(pred_domains).upper()
+        if empty_DD_Flag == 1:
+            pred_dom = []
+            for i in pred_domains:
+                if i.upper() != 'DD':
+                    pred_dom.append(i.upper())
+            pred_domains = pred_dom
         domains = ','.join(pred_domains).upper().split(',')
         global all_domains
         all_domains = domains
@@ -385,6 +391,23 @@ def get_pred_domain_list(domain_name):
     for i in domains_final:
         domains.append(i.upper())
     return domains
+
+def get_pods_files(file_name):
+    dsn = cx_Oracle.makedsn("AMRDRML557.pfizer.com", 1532, service_name="PODSPROD.pfizer.com")
+    try:
+        con = cx_Oracle.connect('pods_cdars', 'Pfizer#8143', dsn, encoding="UTF-8")
+    except Exception as e:
+        print('There is an error in connecting to OC', e)
+    cur = con.cursor()
+    sql = "SELECT * from PODSDAL." + file_name
+    cur.execute(sql)
+    col_names = []
+    for i in range(0, len(cur.description)):
+        col_names.append(cur.description[i][0])
+    df_pods_files = pd.DataFrame(cur)
+    df_pods_files.columns = col_names
+    df_pods_files.reset_index(drop=True, level=0, inplace=True)
+    return df_pods_files
 
 def derive_target_files(pred_domains):
     sdtmig_df = pd.DataFrame(pd.read_excel('SDTMIG-labelled.xlsx'))
@@ -455,8 +478,6 @@ def derive_target_files(pred_domains):
             if 'SITEID' in ner_pred_df.columns:
                 if ner_pred_df['SITEID'][i1] == 0:
                     ner_pred_df['SITEID'][i1] = '0000'
-        # print(i)
-        # print(ner_pred_df)
         if i == 'EC':
             EX_input = ner_pred_df
         elif i == 'DS':
@@ -467,15 +488,22 @@ def derive_target_files(pred_domains):
             DM_input = ner_pred_df
         # all_issues = str(issues1) + str(issues2) + str(issues3) + str(issues4)
     # all_issues = all_issues.replace('True', '')
-    address_v = pd.read_csv(c2.address, low_memory=False)
-    country_v = pd.read_csv(c2.country, low_memory=False)
-    contact_info_v = pd.read_csv(c2.contact_info, low_memory=False)
-    person_v = pd.read_csv(c2.person, low_memory=False)
-    study_alias_v = pd.read_csv(c2.study_alias, low_memory=False)
+    contact_info_v = get_pods_files('PODS_ODS_CONTACT_INFO_V')
+    address_v = get_pods_files('PODS_ODS_ADDRESS_V')
+    country_v = get_pods_files('PODS_ODS_COUNTRY_V')
+    study_alias_v = get_pods_files('PODS_ODS_STUDY_ALIAS_V')
+    person_v = get_pods_files('PODS_ODS_PERSON_V')
+    # country_v = pd.read_csv(c2.country, low_memory=False)
+    # address_v = pd.read_csv(c2.address, low_memory=False)
+    # contact_info_v = pd.read_csv(c2.contact_info, low_memory=False)
+    # person_v = pd.read_csv(c2.person, low_memory=False)
+    # study_alias_v = pd.read_csv(c2.study_alias, low_memory=False)
     input_list = [EX_input, DS_input, DD_input, DM_input]
-
+    global empty_DD_Flag
+    empty_DD_Flag = 0
     if DD_input.shape[0] == 0:
         DD_input = DD_input
+        empty_DD_Flag = 1
     else:
         DD_input = general_function(DD_input)
     EX_input = general_function(EX_input)
@@ -539,18 +567,26 @@ def derive_target_files(pred_domains):
     write(EX_input, "EC")
     write(DM_input, "DM")
     write(DS_input, "DS")
-    write(DD_input, "DD")
+    if DD_input.shape[0] > 0:
+        write(DD_input, "DD")
 
     EX_input.to_excel("Results/Target_Files/EC.xlsx", index=False)
     DS_input.to_excel("Results/Target_Files/DS.xlsx", index=False)
-    DD_input.to_excel("Results/Target_Files/DD.xlsx", index=False)
     DM_input.to_excel("Results/Target_Files/DM.xlsx", index=False)
+    if DD_input.shape[0] > 0:
+        DD_input.to_excel("Results/Target_Files/DD.xlsx", index=False)
 
     dir = 'Temp'
     for f in os.listdir(dir):
         os.remove(os.path.join(dir, f))
     db = pymongo.MongoClient().mygrid
     fs = gridfs.GridFS(db)
+    if empty_DD_Flag == 1:
+        pred_dom = []
+        for i in pred_domains:
+            if i.upper() != 'DD':
+                pred_dom.append(i.upper())
+        pred_domains = pred_dom
     for i in pred_domains:
         outdata = db.fs.files.find_one({'filename': i.upper()})
         if outdata != None:
