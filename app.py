@@ -23,6 +23,7 @@ c2 = Av.NERModelLiveData()
 c3 = Av.MetadataAssumptionsDomains()
 
 app = flask.Flask(__name__)
+app.secret_key = 'Hello'
 
 client = pymongo.MongoClient(c1.mongodb_connection)
 mydb = client[c1.db_name]
@@ -66,7 +67,7 @@ def LiveData():
 def SdtmigDecoder():
     return render_template('SdtmigDecoder.html')
 
-@app.route('/', methods = ['GET', 'POST'])
+@app.route('/upload_file/', methods = ['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         filename = []
@@ -84,7 +85,7 @@ def upload_file():
         df1.to_excel("Results/Training_Files/Training_Dataset.xlsx", index=False)
         return render_template('Home.html', message='Local SAS File(s) Successfully Uploaded for Training', curr_dom_list=c2.curr_dom_list, dom_list=c2.dom_list)
 
-@app.route('/oracleConnect', methods = ['GET', 'POST'])
+@app.route('/connect_oracle/', methods = ['GET', 'POST'])
 def connect_oracle():
     if request.method == 'POST':
         global ocuser, ocpassword
@@ -100,7 +101,7 @@ def connect_oracle():
             return render_template('Home.html', message='Please Enter Valid User Credentials')
 
 
-@app.route('/oracleConnect_Live', methods = ['GET', 'POST'])
+@app.route('/connect_oracle_Live/', methods = ['GET', 'POST'])
 def connect_oracle_Live():
     if request.method == 'POST':
         global ocuser, ocpassword
@@ -115,7 +116,7 @@ def connect_oracle_Live():
             return render_template('LiveData.html', message='Please Enter Valid User Credentials')
 
 
-@app.route('/oc_ba_search', methods = ['GET', 'POST'])
+@app.route('/oc_ba_search/', methods = ['GET', 'POST'])
 def oc_ba_search():
     if request.method == 'POST':
         global study
@@ -131,7 +132,7 @@ def oc_ba_search():
             print('There is an error in connecting to OC***',e)
 
 
-@app.route('/oc_ba_search_live', methods = ['GET', 'POST'])
+@app.route('/oc_ba_search_live/', methods = ['GET', 'POST'])
 def oc_ba_search_live():
     if request.method == 'POST':
         global study
@@ -147,7 +148,7 @@ def oc_ba_search_live():
         except Exception as e:
             print('There is an error in connecting to OC***',e)
 
-@app.route('/train_oracle', methods = ['GET', 'POST'])
+@app.route('/train_oracle/', methods = ['GET', 'POST'])
 def train_oracle():
     if request.method == 'POST':
         global schemaLike, tableLike, numData, domain_oc
@@ -197,7 +198,7 @@ def train_oracle():
         temp_collection.insert_one(dict1)
         return render_template('Home.html', automap='AutoMap File Generated. Click below button to Download.')
 
-@app.route('/train_saslocal', methods = ['GET', 'POST'])
+@app.route('/train_saslocal/', methods = ['GET', 'POST'])
 def train_saslocal():
     if request.method == 'POST':
         domain = request.form['domain']
@@ -235,7 +236,7 @@ def train_saslocal():
         temp_collection.insert_one(dict1)
         return render_template('Home.html', automap='AutoMap File Generated. Click below button to Download.')
 
-@app.route('/download_mapfile')
+@app.route('/download_mapfile/')
 def download_mapfile():
     all_records = temp_collection.find()
     df = pd.DataFrame(all_records)
@@ -245,7 +246,7 @@ def download_mapfile():
         fp.write(str(tds_dict))
     return send_file(f,as_attachment=True)
 
-@app.route('/uploadmapfile', methods = ['GET', 'POST'])
+@app.route('/upload_updated_map_file/', methods = ['GET', 'POST'])
 def upload_updated_map_file():
     if request.method == 'POST':
         collection_output = mydb[domain_name.upper()]
@@ -288,8 +289,8 @@ def upload_updated_map_file():
         collection_output.insert_one(dict1)
         return render_template('Home.html', trainingsuccess='Map File and Principle Metadata generated Successfully' , outputlocation=domain_name)
 
-@app.route('/ReadLiveData', methods = ['GET', 'POST'])
-def upload_file_liveData():
+@app.route('/ReadLiveData/', methods = ['GET', 'POST'])
+def ReadLiveData():
     if request.method == 'POST':
         filename = []
         for f in request.files.getlist('files'):
@@ -309,7 +310,7 @@ def upload_file_liveData():
             raw_ds.to_excel(path, index=False)
         return render_template('LiveData.html', message='Local SAS File(s) Successfully Uploaded for LiveData', curr_dom_list=c2.curr_dom_list, dom_list=c2.dom_list)
 
-@app.route('/downloadTargetDataset', methods = ['GET', 'POST'])
+@app.route('/downloadTargetDataset/', methods = ['GET', 'POST'])
 def downloadTargetDataset():
     if request.method == 'POST':
         filetype = request.form['filetype']
@@ -324,7 +325,7 @@ def downloadTargetDataset():
             f = './Results/Target_Files/' + filedomain.upper() + '.' + filetype
             return send_file(f, as_attachment=True)
 
-@app.route('/predict_saslocal', methods = ['GET', 'POST'])
+@app.route('/predict_saslocal/', methods = ['GET', 'POST'])
 def predict_saslocal():
     if request.method == 'POST':
         # domain_name = request.form['domains']
@@ -343,8 +344,8 @@ def predict_saslocal():
         all_domains = domains
         return render_template('LiveData.html', directmovemsg=directmovecomplete, domains=domains)
 
-@app.route('/predict_oracle', methods = ['GET', 'POST'])
-def predict_values_oracle():
+@app.route('/predict_oracle/', methods = ['GET', 'POST'])
+def predict_oracle():
     if request.method == 'POST':
         global schemaLike, numData, pred_domains
         schemaLike = request.form['schemaLike']

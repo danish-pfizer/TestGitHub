@@ -212,7 +212,7 @@
         <!--<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>-->
         <script>
             $(document).ready(function(){
-                const ocConnect=`<form action="/oracleConnect" method="POST" enctype = "multipart/form-data"><div>
+                const ocConnect=`<form action="{{url_for('connect_oracle')}}" method="POST" enctype = "multipart/form-data"><div>
                     <div class="input-group input-group-outline my-3">
                         <input class="form-control" placeholder="User Name" name="ocuser" required/>
                     </div>
@@ -243,32 +243,7 @@
                                     </div>
                                 </div>`
 
-                const oc_ba_search =` <form action="/oc_ba_search" method="POST" enctype = "multipart/form-data">
-                    <div>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="input-group input-group-outline my-3">
-                                    <input class="form-control" placeholder="Enter Study Name:" name="study" required/>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="input-group input-group-outline my-3">
-                                    <input class="btn btn-primary" value="Search" type="submit" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>`;
-
-                const training_oc =` <form action="/train_oracle" method="POST" enctype = "multipart/form-data"><div>
-                    <!--<div class="input-group input-group-outline my-3">
-                        <select class="form-control" name="schemaLike">
-                            <option>Select BA</option>
-                            {% for ba in ba_list %}
-                            <option value="{{ba}}">{{ba}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>-->
+                const training_oc =` <form action="{{url_for('train_oracle')}}" method="POST" enctype = "multipart/form-data"><div>
                     <div class="input-group input-group-outline my-3">
                         <input class="form-control" placeholder="Schema (Like ie BA_%):" name="schemaLike" required/>
                     </div>
@@ -281,9 +256,6 @@
                     <div class="input-group input-group-outline my-3">
                         <select class="form-control" name="domain" required>
                             <option>Select Domain Name</option>
-                            <!--{% for domain in curr_dom_list %}
-                            <option value="{{domain}}">{{domain}}</option>
-                            {% endfor %}-->
                             {% for domain in dom_list %}
                             {% if domain in curr_dom_list %}
                             <option value="{{domain}}">{{domain}}</option>
@@ -299,13 +271,10 @@
                     <input class="btn btn-primary" type="submit" />
                 </div></form>`;
 
-                const training_saslocal =` <form action="/train_saslocal" method="POST" enctype = "multipart/form-data"><div>
+                const training_saslocal =` <form action="{{url_for('train_saslocal')}}" method="POST" enctype = "multipart/form-data"><div>
                     <div class="input-group input-group-outline my-3">
                         <select class="form-control" name="domain" required>
                             <option>Select Domain Name</option>
-                            <!--{% for domain in curr_dom_list %}
-                            <option value="{{domain}}">{{domain}}</option>
-                            {% endfor %}-->
                             {% for domain in dom_list %}
                             {% if domain in curr_dom_list %}
                             <option value="{{domain}}">{{domain}}</option>
@@ -318,7 +287,7 @@
                     <input class="btn btn-primary" type="submit" />
                 </div></form>`;
 
-                const mapfiledownload =` <form action="/download_mapfile" method=""><div>
+                const mapfiledownload =` <form action="{{url_for('download_mapfile')}}" method=""><div>
                     <input class="btn btn-primary" type="submit" value="Download" onclick="UploadUpdatedMapFile()" />
                 </div></form>`;
 
@@ -337,11 +306,6 @@
                     $('#datassetSelect').html(training_saslocal);
                 }
                 if( x === 'UI has been connected to Oracle'){
-                    $('#datassetSelect').html(training_oc);
-                }
-
-                var x = document.getElementById('ba_message').innerText;
-                if( x != ''){
                     $('#datassetSelect').html(training_oc);
                 }
 
@@ -369,7 +333,7 @@
                     </div>
                 </div></form>`;
 
-                const sasLocal = `<form action="/" method="POST" enctype = "multipart/form-data">
+                const sasLocal = `<form action="{{url_for('upload_file')}}" method="POST" enctype = "multipart/form-data">
                     <div>
                         <div class="input-group">
                             <div class="custom-file">
@@ -388,7 +352,7 @@
             }
 
             function UploadUpdatedMapFile() {
-                const uploadMapFile = `<form action="/uploadmapfile" method="POST" enctype = "multipart/form-data">
+                const uploadMapFile = `<form action="{{url_for('upload_updated_map_file')}}" method="POST" enctype = "multipart/form-data">
                     <div>
                         <div class="input-group">
                             <div class="custom-file">

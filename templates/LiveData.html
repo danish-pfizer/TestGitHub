@@ -190,7 +190,7 @@
         <!--<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>-->
         <script>
             $(document).ready(function(){
-                const ocConnect=`<form action="/oracleConnect_Live" method="POST" enctype = "multipart/form-data"><div>
+                const ocConnect=`<form action="{{url_for('connect_oracle_Live')}}" method="POST" enctype = "multipart/form-data"><div>
                     <div class="input-group input-group-outline my-3">
                         <input class="form-control" placeholder="User Name" name="ocuser" required/>
                     </div>
@@ -221,7 +221,7 @@
                                     </div>
                                 </div>`
 
-                const oc_ba_search_live =` <form action="/oc_ba_search_live" method="POST" enctype = "multipart/form-data">
+                const oc_ba_search_live =` <form action="{{url_for('oc_ba_search_live')}}" method="POST" enctype = "multipart/form-data">
                     <div>
                         <div class="row">
                             <div class="col-6">
@@ -238,7 +238,7 @@
                     </div>
                 </form>`;
 
-                const training_oc =` <form action="/predict_oracle" method="POST" enctype = "multipart/form-data"><div>
+                const training_oc =` <form action="{{url_for('predict_oracle')}}" method="POST" enctype = "multipart/form-data"><div>
                     <div class="input-group input-group-outline my-3">
                         <select class="form-control" name="schemaLike" required>
                             <option value="">Select BA</option>
@@ -299,7 +299,7 @@
                     <input class="btn btn-primary" type="submit" />
                 </div></form>`;
 
-                const training_saslocal =` <form action="/predict_saslocal" method="POST" enctype = "multipart/form-data">
+                const training_saslocal =` <form action="{{url_for('predict_saslocal')}}" method="POST" enctype = "multipart/form-data">
                 <div class="col-10">
                 <div class="table-wrapper-scroll-y my-custom-scrollbar">
                                     <table class="table table-striped table-dark mb-0">
@@ -328,14 +328,7 @@
                     <input class="btn btn-primary" type="submit" value="Submit" />
                 </div></form>`;
 
-                const derived_vars =` <form action="/derived_cols" method="POST" enctype = "multipart/form-data"><div>
-                    <div class="input-group input-group-outline my-3">
-                        <input class="form-control" placeholder="Domain Name" name="domain" required/>
-                    </div>
-                    <input class="btn btn-primary" type="submit" value="Submit" onclick="UploadUpdatedMapFile()" />
-                </div></form>`;
-
-                const targetdatasetdownload=`<form action="/downloadTargetDataset" method="POST" enctype = "multipart/form-data"><div>
+                const targetdatasetdownload=`<form action="{{url_for('downloadTargetDataset')}}" method="POST" enctype = "multipart/form-data"><div>
                     <div class="row">
                     <div class="col-6">
                     <div class="input-group input-group-outline my-3">
@@ -388,11 +381,6 @@
 
                 var x = document.getElementById('predictcomplete').innerText;
                 if( x != ''){
-                    $('#validation').html(derived_vars);
-                }
-
-                var x = document.getElementById('predictcomplete').innerText;
-                if( x != ''){
                     $('#downloadtarget').html(targetdatasetdownload);
                 }
 
@@ -416,7 +404,7 @@
                     </div>
                 </div></form>`;
 
-                const sasLocal = `<form action="/ReadLiveData" method="POST" enctype = "multipart/form-data">
+                const sasLocal = `<form action="{{url_for('ReadLiveData')}}" method="POST" enctype = "multipart/form-data">
                     <div>
                         <div class="input-group">
                             <div class="custom-file">
@@ -432,22 +420,6 @@
                 }else if(x === 'local'){
                     $('#connectionTypeSAS').html(sasLocal);
                 }
-            }
-
-            function UploadUpdatedMapFile() {
-                const uploadMapFile = `<form action="/uploadmapfile" method="POST" enctype = "multipart/form-data">
-                    <div>
-                        <div class="input-group">
-                            <div class="custom-file">
-                                <label class="custom-file-label">Upload Updated Map File: </label>
-                                <input type="file" name="files" class="custom-file-input" name="mapfile" id="sas" required/>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <input class="btn btn-primary" type="submit" name="upload" value="upload" />
-                    </div></form>`;
-                $('#uploadMapFile').html(uploadMapFile);
             }
         </script>
     </body>
